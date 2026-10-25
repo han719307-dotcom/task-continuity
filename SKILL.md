@@ -1,6 +1,6 @@
 ---
 name: task-continuity
-description: "Manage continuity and handoff for long-running, multi-phase, or multi-session work by maintaining a compact task card, choosing the right task boundary, and reconciling recovery against workspace evidence. Use when work must survive pauses, context compaction, or thread handoffs, including migrations, refactors, research followed by implementation, and long verification. Do not use automatically for simple Q&A, one-command checks, or edits that finish in one turn."
+description: "Manage task continuity and handoff for long-running, multi-phase, or multi-session work by maintaining a compact task card, choosing the right task boundary, and reconciling recovery against workspace evidence. Use when work must survive pauses, context compaction, session resumption, or thread handoffs, including migrations, refactors, research followed by implementation, and long verification. Do not use automatically for simple Q&A, one-command checks, or edits that finish in one turn."
 ---
 
 # Task Continuity

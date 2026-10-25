@@ -1,10 +1,28 @@
-# Task Continuity
+# Task Continuity: Long-Running AI Agent Task Handoff Skill
 
 [English](#english) | [简体中文](#简体中文)
+
+[![MIT License](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
+[![Agent Skills](https://img.shields.io/badge/Agent%20Skills-compatible-4B5563)](https://agentskills.io/specification)
+[![Codex](https://img.shields.io/badge/Codex-supported-10A37F)](#installation)
+[![Claude Code](https://img.shields.io/badge/Claude%20Code-supported-D97757)](#installation)
+[![DeepSeek Harness](https://img.shields.io/badge/DeepSeek%20Harness-supported-4D6BFE)](#installation)
 
 An instruction-only Agent Skill for keeping long-running work resumable across pauses, context compaction, and thread handoffs.
 
 一个仅包含指令的 Agent Skill，用于让长时间、多阶段任务在暂停、上下文压缩或会话交接后仍可恢复。
+
+> Looking for a way to resume a long-running AI coding task, recover a task after context compaction, or hand unfinished work to a new thread? This skill is designed for that problem.
+>
+> 想恢复被上下文压缩打断的长任务、让新线程继续未完成的工作，或避免 AI Agent 重复已经做过的事情？这个 Skill 面向的正是这类问题。
+
+```mermaid
+flowchart LR
+  A[Long-running task] --> B[Compact task card]
+  B --> C[Pause / compaction / new thread]
+  C --> D[Verify workspace evidence]
+  D --> E[Resume the next concrete action]
+```
 
 ---
 
@@ -15,6 +33,27 @@ An instruction-only Agent Skill for keeping long-running work resumable across p
 Task Continuity maintains a compact, evidence-backed task card instead of attempting to preserve an entire conversation. It helps an agent decide when continuity management is useful, where one task should end, how to hand work off, and how to recover from verified workspace evidence.
 
 This repository contains instructions and UI metadata only. There is no server to start, no dependency installation, and no build step.
+
+### Why Task Continuity?
+
+Long-running agent sessions often fail at boundaries rather than inside individual commands:
+
+- the original objective and completion criteria are lost after compaction;
+- completed work and failed approaches are rediscovered;
+- a new thread starts without the decisions that are still in force;
+- a summary claims work is complete when the workspace says otherwise.
+
+Task Continuity keeps only the verified state that changes future action, so an agent can continue instead of restarting.
+
+### Common search intents
+
+This skill is for tasks such as:
+
+- "resume a long-running Codex task after context compaction";
+- "hand off unfinished work to a new Claude Code thread";
+- "keep AI agent task state across sessions";
+- "prevent duplicate work after an agent runs out of context";
+- "create a compact task handoff for Codex, WorkBuddy, or DeepSeek Harness".
 
 ### Features
 
@@ -96,6 +135,8 @@ Hosts can also select the skill automatically when a task matches the descriptio
 
 Typical scenarios include migrations, refactors, releases, research followed by implementation, long verification, and work that must survive a pause or handoff. It is not intended for simple Q&A, one-command checks, or edits completed in one turn unless continuity is explicitly requested.
 
+If this solves a problem you have hit, add a GitHub star to make the project easier for other agent users to discover.
+
 ### Validation
 
 1. Confirm that `SKILL.md` contains `name` and `description` in its YAML frontmatter.
@@ -126,6 +167,27 @@ This project is available under the [MIT License](LICENSE).
 Task Continuity 通过简短且有证据支撑的任务卡保存会影响后续行动的状态，而不是试图保留整段对话。它帮助智能体判断何时需要管理任务连续性、如何划分任务边界、如何交接，以及如何根据工作区证据恢复任务。
 
 本仓库仅包含指令和界面元数据，不需要启动服务、安装依赖或执行构建。
+
+### 为什么需要 Task Continuity？
+
+长时间运行的 Agent 会话通常不是败在单条命令，而是败在任务边界：
+
+- 上下文压缩后忘记最初目标和完成标准；
+- 重新探索已经完成的工作或已经排除的方案；
+- 新线程不知道此前已经确认的决定和约束；
+- 摘要声称任务已经完成，但工作区实际情况并不一致。
+
+Task Continuity 只保存会影响后续行动且已被验证的状态，让 Agent 接着做，而不是从头开始。
+
+### 常见搜索需求
+
+这个 Skill 适用于寻找以下能力的人：
+
+- “上下文压缩后恢复 Codex 长任务”；
+- “把未完成任务交接给新的 Claude Code 线程”；
+- “让 AI Agent 跨会话保留任务状态”；
+- “避免 Agent 因上下文不足重复已完成的工作”；
+- “为 Codex、WorkBuddy 或 DeepSeek Harness 生成精简任务交接”。
 
 ### 主要功能
 
@@ -207,6 +269,8 @@ Use $task-continuity to maintain a compact task card and verify where this long-
 
 典型场景包括迁移、重构、发布、先研究后实施、长时间验证，以及需要跨暂停或交接继续的工作。除非用户明确要求管理连续性，否则它不适用于简单问答、单命令检查或单轮完成的修改。
 
+如果这个项目解决了你遇到的问题，可以添加一个 GitHub Star，让更多 Agent 用户更容易发现它。
+
 ### 验证方法
 
 1. 确认 `SKILL.md` 的 YAML frontmatter 包含 `name` 和 `description`。
@@ -236,3 +300,4 @@ Use $task-continuity to maintain a compact task card and verify where this long-
 - [Agent Skills specification](https://agentskills.io/specification)
 - [Claude Code: Extend Claude with skills](https://code.claude.com/docs/en/skills)
 - [DeepSeek Harness repository](https://github.com/deepseek-ai/deepseek-harness)
+- [DeepSeek Harness documentation](https://deepseek-harness.github.io/deepseek-harness/)
