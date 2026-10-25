@@ -1,0 +1,4 @@
+interface:
+  display_name: "Task Continuity"
+  short_description: "Keep complex work resumable across context boundaries"
+  default_prompt: "Use $task-continuity to maintain a compact task card and verify where this long-running task should continue."

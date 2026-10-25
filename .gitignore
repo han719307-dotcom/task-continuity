@@ -1,0 +1,48 @@
+# Secrets and local environment files
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+*.p12
+*.pfx
+*.keystore
+*.jks
+credentials.json
+config.local.*
+
+# Local task state and tool configuration
+/TASK_CARD.md
+.codex/
+.workbuddy/
+.claude/settings.local.json
+
+# Editor and operating system files
+.DS_Store
+Thumbs.db
+Desktop.ini
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+
+# Dependencies
+node_modules/
+.venv/
+venv/
+__pycache__/
+*.py[cod]
+
+# Build, test, and coverage output
+dist/
+build/
+out/
+coverage/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+
+# Logs
+*.log
+logs/
