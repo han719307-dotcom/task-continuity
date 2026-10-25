@@ -14,6 +14,8 @@ config.local.*
 # Local task state and tool configuration
 /TASK_CARD.md
 .codex/
+.codebuddy/
+.dsh/
 .workbuddy/
 .claude/settings.local.json
 

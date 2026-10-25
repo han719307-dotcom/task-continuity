@@ -18,7 +18,7 @@ This repository contains instructions and UI metadata only. There is no server t
 
 ### Features
 
-- Maintains one concise `TASK_CARD.md` for active delivery state.
+- Maintains one `TASK_CARD.md` with a separate section for each active delivery.
 - Records completion criteria, verified evidence, next actions, constraints, and unresolved risks.
 - Distinguishes continuation, independent delivery, and unrelated-task boundaries.
 - Produces compact handoffs without copying the full conversation.
@@ -34,39 +34,51 @@ task-continuity/
 ├── agents/
 │   └── openai.yaml      # Display name, short description, and default prompt
 ├── .gitignore           # Excludes secrets, local state, dependencies, and outputs
+├── LICENSE              # MIT license
 └── README.md            # Bilingual project documentation
 ```
 
 ### Requirements
 
-Use a host that supports the Agent Skills format, such as Codex CLI, the Codex IDE extension, or the Codex app. No programming language runtime or third-party package is required by this repository.
+Use a host that supports the Agent Skills format. No programming language runtime or third-party package is required by the skill itself.
 
 ### Installation
 
-Install the complete directory in one of Codex's skill locations:
+Install the complete directory under the skill root used by your host:
 
-- **User scope:** `$HOME/.agents/skills/task-continuity/`
-- **Repository scope:** `<repository>/.agents/skills/task-continuity/`
+| Host | User-level root | Project-level root | Invocation |
+|---|---|---|---|
+| Codex | `$CODEX_HOME/skills/task-continuity/` (default: `~/.codex/skills/task-continuity/`) | Use the host's project skill root where supported | `$task-continuity` |
+| Claude Code | `~/.claude/skills/task-continuity/` | `.claude/skills/task-continuity/` | `/task-continuity` |
+| WorkBuddy / CodeBuddy | `~/.codebuddy/skills/task-continuity/` | `.codebuddy/skills/task-continuity/` | Skill picker or `/task-continuity` when slash invocation is enabled |
+| DeepSeek Harness | `~/.dsh/skills/task-continuity/` or `~/.agents/skills/task-continuity/` | `.dsh/skills/task-continuity/` or `.agents/skills/task-continuity/` | `/task-continuity` |
+| Other Agent Skills hosts | The host's documented skill root, or `~/.agents/skills/task-continuity/` when it supports the shared root | `<project>/.agents/skills/task-continuity/` when supported | Host-specific; otherwise load `SKILL.md` explicitly |
 
-For a user-scoped installation, clone directly into the skills directory.
+Create the parent directory before cloning into a user-level root.
 
 macOS or Linux:
 
 ```bash
-git clone https://github.com/han719307-dotcom/task-continuity.git "$HOME/.agents/skills/task-continuity"
+export SKILLS_ROOT="$HOME/.codex/skills"
+mkdir -p "$SKILLS_ROOT"
+git clone https://github.com/han719307-dotcom/task-continuity.git "$SKILLS_ROOT/task-continuity"
 ```
 
 Windows PowerShell:
 
 ```powershell
-git clone https://github.com/han719307-dotcom/task-continuity.git "$HOME\.agents\skills\task-continuity"
+$skillsRoot = Join-Path $HOME ".codex\skills"
+New-Item -ItemType Directory -Force $skillsRoot | Out-Null
+git clone https://github.com/han719307-dotcom/task-continuity.git (Join-Path $skillsRoot "task-continuity")
 ```
 
-Codex normally detects skill changes automatically. If the skill does not appear, restart Codex. For repository-scoped use, copy or clone this directory into `.agents/skills/task-continuity/` instead.
+Replace `SKILLS_ROOT` / `$skillsRoot` with the root for another host from the table. Reopen or restart the host if the skill does not appear.
+
+`agents/openai.yaml` is Codex-specific; other hosts ignore it and read `SKILL.md`. WorkBuddy's managed skill editor additionally expects `agent_created: true` in the installed copy's frontmatter. Add that field only to a WorkBuddy-managed copy so the repository's canonical `SKILL.md` remains valid for Codex and other hosts.
 
 ### Usage
 
-There is no standalone startup command. After installation, invoke the skill explicitly in Codex:
+There is no standalone startup command. After installation, use the host's invocation form or ask the host to apply the skill:
 
 ```text
 $task-continuity
@@ -78,7 +90,9 @@ Or include it in a request:
 Use $task-continuity to maintain a compact task card and verify where this long-running task should continue.
 ```
 
-Codex can also select the skill automatically when a task matches the description in `SKILL.md`. Use `/skills` or the skill selector to confirm that it is available.
+Use `/task-continuity` in Claude Code, DeepSeek Harness, and slash-command-enabled WorkBuddy sessions. If a host has no skill loader, provide its `SKILL.md` as an attached or project instruction file.
+
+Hosts can also select the skill automatically when a task matches the description in `SKILL.md`. Use the host's skill selector to confirm that it is available.
 
 Typical scenarios include migrations, refactors, releases, research followed by implementation, long verification, and work that must survive a pause or handoff. It is not intended for simple Q&A, one-command checks, or edits completed in one turn unless continuity is explicitly requested.
 
@@ -101,7 +115,7 @@ Keep the skill focused on continuity management. Preserve its concise task-card 
 
 ### License
 
-No open-source license has been selected yet. Until one is added, the default copyright rules apply.
+This project is available under the [MIT License](LICENSE).
 
 ---
 
@@ -115,7 +129,7 @@ Task Continuity 通过简短且有证据支撑的任务卡保存会影响后续�
 
 ### 主要功能
 
-- 使用一份精简的 `TASK_CARD.md` 维护当前交付状态。
+- 使用一份 `TASK_CARD.md`，并为每个活动交付维护独立的任务卡段落。
 - 记录完成标准、已验证证据、下一步行动、约束和未解决风险。
 - 区分同一交付的延续、独立交付和无关任务的边界。
 - 生成交接摘要，避免复制整段对话。
@@ -131,39 +145,51 @@ task-continuity/
 ├── agents/
 │   └── openai.yaml      # 显示名称、简短说明和默认提示词
 ├── .gitignore           # 排除密钥、本地状态、依赖和构建产物
+├── LICENSE              # MIT 许可证
 └── README.md            # 中英文双语项目文档
 ```
 
 ### 环境要求
 
-需要支持 Agent Skills 格式的宿主，例如 Codex CLI、Codex IDE 扩展或 Codex 应用。本仓库自身不依赖任何编程语言运行时或第三方软件包。
+需要支持 Agent Skills 格式的宿主。Skill 本身不依赖编程语言运行时或第三方软件包。
 
 ### 安装方式
 
-将完整目录安装到 Codex 的任一 Skills 目录：
+将完整目录安装到目标宿主使用的 Skill 根目录：
 
-- **用户级：** `$HOME/.agents/skills/task-continuity/`
-- **仓库级：** `<repository>/.agents/skills/task-continuity/`
+| 宿主 | 用户级目录 | 项目级目录 | 调用方式 |
+|---|---|---|---|
+| Codex | `$CODEX_HOME/skills/task-continuity/`（默认：`~/.codex/skills/task-continuity/`） | 使用宿主支持的项目级 Skill 目录 | `$task-continuity` |
+| Claude Code | `~/.claude/skills/task-continuity/` | `.claude/skills/task-continuity/` | `/task-continuity` |
+| WorkBuddy / CodeBuddy | `~/.codebuddy/skills/task-continuity/` | `.codebuddy/skills/task-continuity/` | Skill 选择器，或启用斜杠调用时使用 `/task-continuity` |
+| DeepSeek Harness | `~/.dsh/skills/task-continuity/` 或 `~/.agents/skills/task-continuity/` | `.dsh/skills/task-continuity/` 或 `.agents/skills/task-continuity/` | `/task-continuity` |
+| 其他 Agent Skills 宿主 | 宿主文档指定的目录；支持共享目录时可用 `~/.agents/skills/task-continuity/` | 支持时使用 `<project>/.agents/skills/task-continuity/` | 取决于宿主，或显式加载 `SKILL.md` |
 
-用户级安装可直接将仓库克隆到 Skills 目录。
+用户级安装前需要先创建父目录。
 
 macOS 或 Linux：
 
 ```bash
-git clone https://github.com/han719307-dotcom/task-continuity.git "$HOME/.agents/skills/task-continuity"
+export SKILLS_ROOT="$HOME/.codex/skills"
+mkdir -p "$SKILLS_ROOT"
+git clone https://github.com/han719307-dotcom/task-continuity.git "$SKILLS_ROOT/task-continuity"
 ```
 
 Windows PowerShell：
 
 ```powershell
-git clone https://github.com/han719307-dotcom/task-continuity.git "$HOME\.agents\skills\task-continuity"
+$skillsRoot = Join-Path $HOME ".codex\skills"
+New-Item -ItemType Directory -Force $skillsRoot | Out-Null
+git clone https://github.com/han719307-dotcom/task-continuity.git (Join-Path $skillsRoot "task-continuity")
 ```
 
-Codex 通常会自动检测 Skill 变更；如果没有显示，请重启 Codex。仓库级使用则将此目录复制或克隆到 `.agents/skills/task-continuity/`。
+将 `SKILLS_ROOT` / `$skillsRoot` 替换为上表中目标宿主的目录。如果安装后没有显示，请重新打开或重启宿主。
+
+`agents/openai.yaml` 仅用于 Codex；其他宿主会忽略它并读取 `SKILL.md`。WorkBuddy 的托管 Skill 编辑器还要求安装副本的 frontmatter 包含 `agent_created: true`。只应在 WorkBuddy 托管的副本中添加该字段，确保仓库中的标准 `SKILL.md` 仍能被 Codex 和其他宿主校验。
 
 ### 使用与启动
 
-本项目没有独立的启动命令。安装后，在 Codex 中显式调用：
+本项目没有独立的启动命令。安装后，使用宿主的调用形式，或要求宿主应用该 Skill：
 
 ```text
 $task-continuity
@@ -175,7 +201,9 @@ $task-continuity
 Use $task-continuity to maintain a compact task card and verify where this long-running task should continue.
 ```
 
-当任务符合 `SKILL.md` 中的描述时，Codex 也可以自动选择此 Skill。可通过 `/skills` 或 Skill 选择器确认它是否可用。
+在 Claude Code、DeepSeek Harness 和支持斜杠命令的 WorkBuddy 会话中可使用 `/task-continuity`。如果宿主没有 Skill 加载器，可将 `SKILL.md` 作为附件或项目指令文件提供。
+
+当任务符合 `SKILL.md` 中的描述时，宿主也可以自动选择此 Skill。可通过对应宿主的 Skill 选择器确认它是否可用。
 
 典型场景包括迁移、重构、发布、先研究后实施、长时间验证，以及需要跨暂停或交接继续的工作。除非用户明确要求管理连续性，否则它不适用于简单问答、单命令检查或单轮完成的修改。
 
@@ -198,7 +226,7 @@ Use $task-continuity to maintain a compact task card and verify where this long-
 
 ### 许可证
 
-尚未选择开源许可证。在添加许可证前，适用默认版权规则。
+本项目使用 [MIT 许可证](LICENSE)。
 
 ---
 
@@ -206,3 +234,5 @@ Use $task-continuity to maintain a compact task card and verify where this long-
 
 - [OpenAI: Build skills](https://developers.openai.com/codex/build-skills)
 - [Agent Skills specification](https://agentskills.io/specification)
+- [Claude Code: Extend Claude with skills](https://code.claude.com/docs/en/skills)
+- [DeepSeek Harness repository](https://github.com/deepseek-ai/deepseek-harness)
